@@ -28,7 +28,7 @@ jobs:
       - name: Upload pages artifact (index.html)
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./index.html
+          path: index.html
 
   deploy:
     needs: build
