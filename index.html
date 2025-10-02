@@ -1,497 +1,241 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lucky - 高性能即时通讯解决方案</title>
-    <style>
-        :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3f37c9;
-            --accent-color: #4895ef;
-            --success-color: #4cc9f0;
-            --warning-color: #f72585;
-            --light-color: #f8f9fa;
-            --dark-color: #212529;
-            --gray-color: #6c757d;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lucky — 高性能即时通讯解决方案</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <style>
+    :root{
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --primary: #409eff; /* 你要求的主色 */
+      --muted: #6b7280;
+      --text: #111827;
+      --radius: 12px;
+      --gap: 20px;
+      --shadow: 0 6px 18px rgba(16,24,40,0.06);
+      --glass: rgba(255,255,255,0.6);
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f5f7fb;
-        }
+    /* Reset */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      padding-bottom:56px;
+    }
 
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-            box-shadow: var(--box-shadow);
-        }
+    /* Layout container */
+    .wrap{max-width:1100px;margin:28px auto;padding:24px}
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
+    /* Header / Hero */
+    header.hero{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      justify-content:space-between;
+      background:linear-gradient(180deg, rgba(64,158,255,0.08), rgba(64,158,255,0.03));
+      border-radius:var(--radius);
+      padding:28px;
+      box-shadow:var(--shadow);
+    }
+    .hero-left{max-width:64%;}
+    .logo{
+      width:56px;height:56px;border-radius:12px;
+      background:var(--primary);
+      display:flex;align-items:center;justify-content:center;color:#fff;
+      font-weight:700;font-size:22px;box-shadow:0 6px 18px rgba(64,158,255,0.18);
+    }
+    .title{
+      font-size:28px;font-weight:700;margin-bottom:6px;
+      color:var(--text);
+    }
+    .subtitle{
+      color:var(--muted);font-size:14px;
+    }
+    .hero-actions{display:flex;gap:10px;align-items:center}
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 16px;border-radius:999px;border:0;cursor:pointer;
+      font-weight:600;text-decoration:none;
+      transition:all .18s ease;
+    }
+    .btn-primary{
+      background:var(--primary);color:#fff;box-shadow:0 6px 18px rgba(64,158,255,0.12)
+    }
+    .btn-ghost{
+      background:transparent;color:var(--primary);border:1px solid rgba(64,158,255,0.12)
+    }
+    .btn-primary:hover{transform:translateY(-3px)}
+    .btn-ghost:hover{background:rgba(64,158,255,0.06)}
 
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
+    /* badges */
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .badge{
+      background:rgba(16,24,40,0.04);
+      color:var(--muted);padding:6px 10px;border-radius:999px;font-size:13px
+    }
 
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-        }
+    /* Intro card */
+    .intro{
+      margin-top:20px;padding:20px;border-radius:12px;background:var(--card);
+      box-shadow:var(--shadow);
+    }
+    .intro p{color:var(--muted);font-size:15px;margin-bottom:10px}
 
-        .badges {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin: 1rem 0;
-        }
+    /* Grid features */
+    .grid{
+      margin-top:22px;display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap);
+    }
+    .card{
+      background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow);
+      transition:transform .16s ease, box-shadow .16s ease;
+    }
+    .card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(16,24,40,0.08)}
+    .card h3{margin-bottom:8px;color:var(--primary);font-size:17px}
+    .card p{color:var(--muted);font-size:14px}
 
-        .badge {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 0.3rem 0.8rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            backdrop-filter: blur(5px);
-        }
+    /* tech stack */
+    .stack{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    .chip{background:rgba(16,24,40,0.04);padding:8px 12px;border-radius:999px;font-weight:600;color:var(--muted);font-size:13px}
 
-        .intro {
-            text-align: center;
-            padding: 3rem 0;
-            background: white;
-            margin: 2rem 0;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
+    /* CTA */
+    .cta{margin-top:26px;padding:20px;border-radius:12px;background:linear-gradient(90deg, rgba(64,158,255,0.08), rgba(64,158,255,0.03));display:flex;align-items:center;justify-content:space-between}
+    .cta h2{font-size:18px;margin-bottom:6px}
+    .cta p{color:var(--muted);font-size:14px}
 
-        .intro p {
-            max-width: 800px;
-            margin: 0 auto 1.5rem;
-            font-size: 1.1rem;
-            color: var(--gray-color);
-        }
+    /* footer */
+    footer{margin-top:36px;padding:20px;border-radius:12px;background:transparent;text-align:center;color:var(--muted);font-size:13px}
 
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .feature-card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            box-shadow: var(--box-shadow);
-            transition: var(--transition);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .feature-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .feature-card ul {
-            list-style-type: none;
-        }
-
-        .feature-card li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .feature-card li:last-child {
-            border-bottom: none;
-        }
-
-        .feature-card li:before {
-            content: "✓";
-            color: var(--success-color);
-            font-weight: bold;
-            margin-right: 0.5rem;
-        }
-
-        .section-title {
-            text-align: center;
-            margin: 3rem 0 2rem;
-            color: var(--secondary-color);
-            position: relative;
-        }
-
-        .section-title:after {
-            content: "";
-            display: block;
-            width: 50px;
-            height: 3px;
-            background: var(--accent-color);
-            margin: 0.5rem auto;
-            border-radius: 3px;
-        }
-
-        .projects {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .project-card {
-            background: white;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--box-shadow);
-            transition: var(--transition);
-        }
-
-        .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .project-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        .project-body {
-            padding: 1.5rem;
-        }
-
-        .project-body ul {
-            list-style-type: none;
-            margin: 1rem 0;
-        }
-
-        .project-body li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            align-items: center;
-        }
-
-        .project-body li:before {
-            content: "•";
-            color: var(--accent-color);
-            font-size: 1.2rem;
-            margin-right: 0.5rem;
-        }
-
-        .btn {
-            display: inline-block;
-            background: var(--primary-color);
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: var(--transition);
-            border: none;
-            cursor: pointer;
-            margin: 0.5rem;
-        }
-
-        .btn:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .btn-outline:hover {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .cta {
-            text-align: center;
-            padding: 3rem 0;
-            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
-            color: white;
-            margin: 3rem 0;
-            border-radius: var(--border-radius);
-        }
-
-        .cta h2 {
-            margin-bottom: 1.5rem;
-        }
-
-        footer {
-            background: var(--dark-color);
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 3rem;
-        }
-
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .tech-item {
-            background: white;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            font-weight: bold;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .features,
-            .projects {
-                grid-template-columns: 1fr;
-            }
-            
-            .badges {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
+    /* Responsive */
+    @media (max-width:960px){
+      .hero-left{max-width:100%}
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .projects{grid-template-columns:repeat(2,1fr)}
+      .hero{flex-direction:column;align-items:flex-start}
+      .hero-actions{width:100%;justify-content:flex-start;margin-top:12px}
+    }
+    @media (max-width:640px){
+      .grid,.projects{grid-template-columns:1fr}
+      .wrap{padding:16px}
+      .logo{width:48px;height:48px;font-size:20px}
+      .title{font-size:20px}
+      .btn{padding:8px 12px;font-size:14px}
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>🍀 Lucky</h1>
-            <p class="subtitle">高性能即时通讯解决方案 - 包含客户端、服务端和移动端的完整生态系统</p>
-            <div class="badges">
-                <span class="badge">即时通讯</span>
-                <span class="badge">音视频通话</span>
-                <span class="badge">跨平台</span>
-                <span class="badge">微服务架构</span>
-                <span class="badge">现代化技术栈</span>
-            </div>
+  <main class="wrap" role="main">
+    <header class="hero" aria-label="Lucky hero">
+      <div style="display:flex;gap:14px;align-items:center">
+        <img class="logo" aria-hidden="true" src="./img/logo.png"></img>
+        <div class="hero-left">
+          <div class="title">Lucky</div>
+          <div class="subtitle">高性能即时通讯解决方案 — 桌面 / 服务端 / 移动端 一体化生态</div>
+          <div class="badges" aria-hidden="true" style="margin-top:10px">
+            <span class="badge">即时通讯</span>
+            <span class="badge">音视频</span>
+            <span class="badge">跨平台</span>
+          </div>
         </div>
+      </div>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#projects">开始使用</a>
+        <a class="btn btn-ghost" href="https://github.com/dennis9486/Lynk" target="_blank" rel="noopener">查看源码</a>
+      </div>
     </header>
 
-    <section class="intro">
-        <div class="container">
-            <h2 class="section-title">项目概述</h2>
-            <p>
-                Lucky 是一个功能丰富的即时通讯生态系统，包含基于 Tauri 和 Vue 3 构建的跨平台桌面客户端、
-                基于 Spring Boot 3 + Spring Cloud Alibaba 构建的高性能服务端，以及基于 Flutter 开发的移动端应用。
-            </p>
-            <p>
-                支持一对一聊天、群聊、文件传输、音视频通话、屏幕录制、屏幕截取等核心功能，采用现代化的技术栈，
-                提供了稳定、高效、安全的即时通讯解决方案。
-            </p>
-            <div>
-                <a href="#client" class="btn">桌面客户端</a>
-                <a href="#cloud" class="btn">服务端</a>
-                <a href="#mobile" class="btn">移动端</a>
-            </div>
-        </div>
+    <section class="intro" aria-labelledby="overview-title">
+      <h2 id="overview-title" style="font-size:18px;margin-bottom:8px;color:var(--text)">项目概述</h2>
+      <p>Lucky 是面向高并发场景的即时通讯平台，包含跨平台桌面客户端、Spring Boot 服务端与 Flutter 移动端。</p>
+      <p>支持一对一和群聊、文件传输、音视频、消息可靠投递与微服务化部署，关注性能与可运维性。</p>
+
+      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn btn-primary" href="https://github.com/Luckly-XYZ/Lucky-client">桌面客户端</a>
+        <a class="btn btn-ghost" href="https://github.com/Luckly-XYZ/Lucky-cloud">服务端</a>
+        <a class="btn btn-ghost" href="https://github.com/Luckly-XYZ/Lucky-mobile">移动端</a>
+      </div>
     </section>
 
-    <div class="container">
-        <h2 class="section-title">核心特性</h2>
-        <div class="features">
-            <div class="feature-card">
-                <h3>💬 即时通讯</h3>
-                <ul>
-                    <li>支持文本、表情、图片、文件等多种消息类型</li>
-                    <li>一对一聊天和群组聊天</li>
-                    <li>消息已读回执和撤回功能</li>
-                    <li>消息转发和离线存储</li>
-                    <li>支持富文本格式和链接解析</li>
-                </ul>
-            </div>
-            <div class="feature-card">
-                <h3>📞 音视频通话</h3>
-                <ul>
-                    <li>一对一音视频通话</li>
-                    <li>群组音视频会议</li>
-                    <li>屏幕共享功能</li>
-                    <li>内置噪音抑制</li>
-                    <li>通话录制支持</li>
-                </ul>
-            </div>
-            <div class="feature-card">
-                <h3>🔒 安全特性</h3>
-                <ul>
-                    <li>消息加密传输</li>
-                    <li>RSA 非对称加密</li>
-                    <li>JWT Token 认证机制</li>
-                    <li>细粒度权限控制</li>
-                    <li>敏感数据加密存储</li>
-                </ul>
-            </div>
-            <div class="feature-card">
-                <h3>🌐 跨平台支持</h3>
-                <ul>
-                    <li>桌面端支持 Windows/macOS/Linux</li>
-                    <li>移动端支持 Android/iOS</li>
-                    <li>统一的服务端架构</li>
-                    <li>响应式设计和适配</li>
-                    <li>多设备消息同步</li>
-                </ul>
-            </div>
-            <div class="feature-card">
-                <h3>⚙️ 系统功能</h3>
-                <ul>
-                    <li>多语言支持 (中/英文)</li>
-                    <li>主题切换 (浅色/深色)</li>
-                    <li>快捷键操作</li>
-                    <li>系统托盘集成</li>
-                    <li>截图和录屏功能</li>
-                </ul>
-            </div>
-            <div class="feature-card">
-                <h3>🚀 高性能架构</h3>
-                <ul>
-                    <li>微服务架构设计</li>
-                    <li>支持万级并发连接</li>
-                    <li>消息队列异步处理</li>
-                    <li>数据库优化和缓存</li>
-                    <li>容器化部署支持</li>
-                </ul>
-            </div>
+    <section aria-labelledby="features-title">
+      <h3 id="features-title" style="margin-top:26px;color:var(--primary)">核心特性</h3>
+
+      <div class="grid" role="list">
+        <div class="card" role="listitem">
+          <h3>💬 即时消息</h3>
+          <p>文本/图片/文件/位置等类型，支持已读/撤回/离线消息与多设备同步。</p>
         </div>
 
-        <h2 class="section-title">技术栈</h2>
-        <div class="tech-stack">
-            <span class="tech-item">Vue 3</span>
-            <span class="tech-item">Tauri</span>
-            <span class="tech-item">Rust</span>
-            <span class="tech-item">Spring Boot 3</span>
-            <span class="tech-item">Spring Cloud Alibaba</span>
-            <span class="tech-item">Flutter</span>
-            <span class="tech-item">WebRTC</span>
-            <span class="tech-item">WebSocket</span>
-            <span class="tech-item">RabbitMQ</span>
-            <span class="tech-item">Redis</span>
-            <span class="tech-item">Nacos</span>
-            <span class="tech-item">MinIO</span>
+        <div class="card" role="listitem">
+          <h3>📞 音视频</h3>
+          <p>WebRTC 支持一对一与组会话，屏幕共享、通话录制与基本降噪。</p>
         </div>
 
-        <h2 id="projects" class="section-title">项目组件</h2>
-        <div class="projects">
-            <div id="client" class="project-card">
-                <div class="project-header">
-                    <h3>🍀 Lucky 客户端</h3>
-                    <p>跨平台桌面即时通讯应用</p>
-                </div>
-                <div class="project-body">
-                    <p>基于 Tauri 和 Vue 3 构建的高性能即时通讯客户端，支持 Windows、macOS 和 Linux。</p>
-                    <ul>
-                        <li>现代化 UI 界面</li>
-                        <li>虚拟列表优化大量消息渲染</li>
-                        <li>文件传输和预览</li>
-                        <li>截图和录屏功能</li>
-                        <li>多语言和主题支持</li>
-                    </ul>
-                    <div>
-                        <a href="README-client.md" class="btn">查看详情</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="cloud" class="project-card">
-                <div class="project-header">
-                    <h3>🍀 Lucky 服务端</h3>
-                    <p>高性能即时通讯服务端系统</p>
-                </div>
-                <div class="project-body">
-                    <p>基于 Spring Boot 3 + Spring Cloud Alibaba 构建的微服务架构，支持高并发。</p>
-                    <ul>
-                        <li>微服务架构设计</li>
-                        <li>高可用性保障</li>
-                        <li>消息可靠投递</li>
-                        <li>水平扩展支持</li>
-                        <li>完善的监控告警</li>
-                    </ul>
-                    <div>
-                        <a href="README-cloud.md" class="btn">查看详情</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="mobile" class="project-card">
-                <div class="project-header">
-                    <h3>🍀 Lucky 移动端</h3>
-                    <p>Flutter 即时通讯应用</p>
-                </div>
-                <div class="project-body">
-                    <p>基于 Flutter 开发的跨平台移动应用，一套代码支持 Android 和 iOS 平台。</p>
-                    <ul>
-                        <li>Material Design 设计</li>
-                        <li>音视频通话支持</li>
-                        <li>通讯录管理</li>
-                        <li>安全加密传输</li>
-                        <li>丰富的功能组件</li>
-                    </ul>
-                    <div>
-                        <a href="README-mobile.md" class="btn">查看详情</a>
-                    </div>
-                </div>
-            </div>
+        <div class="card" role="listitem">
+          <h3>🔒 安全</h3>
+          <p>传输层加密、JWT 身份认证与细粒度权限控制，敏感数据加密存储。</p>
         </div>
-    </div>
 
-    <section class="cta">
-        <div class="container">
-            <h2>开始使用 Lucky 即时通讯解决方案</h2>
-            <p>构建现代、高性能、安全的即时通讯应用</p>
-            <div>
-                <a href="README-client.md" class="btn">桌面客户端</a>
-                <a href="README-cloud.md" class="btn">服务端</a>
-                <a href="README-mobile.md" class="btn">移动端</a>
-            </div>
+        <div class="card" role="listitem">
+          <h3>⚙️ 系统功能</h3>
+          <p>托盘、快捷键、虚拟列表、高效文件传输与多语言 / 主题支持。</p>
         </div>
+
+        <div class="card" role="listitem">
+          <h3>🚀 高性能</h3>
+          <p>微服务、消息队列、Redis 缓存、FTS 搜索与水平扩展能力。</p>
+        </div>
+
+        <div class="card" role="listitem">
+          <h3>🌐 跨平台</h3>
+          <p>Tauri + Vue 桌面、Flutter 移动、统一协议与 SDK 支持多端接入。</p>
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <div style="font-weight:700;color:var(--muted);margin-bottom:8px">技术栈</div>
+        <div class="stack" aria-hidden="true">
+          <span class="chip">Vue 3</span>
+          <span class="chip">Tauri</span>
+          <span class="chip">Spring Boot 3</span>
+          <span class="chip">Spring Cloud Alibaba</span>
+          <span class="chip">Flutter</span>
+          <span class="chip">WebRTC</span>
+          <span class="chip">RabbitMQ</span>
+          <span class="chip">Redis</span>
+          <span class="chip">MinIO</span>
+        </div>
+      </div>
     </section>
 
-    <footer>
-        <div class="container">
-            <p>© 2025 Lucky 项目 - 高性能即时通讯解决方案</p>
-            <p>本项目仅供学习和参考使用，不得用于任何商业用途</p>
-            <p>
-                <a href="https://github.com/dennis9486/Lynk" style="color: white; margin: 0 0.5rem;">项目主页</a> | 
-                <a href="https://github.com/dennis9486/Lynk/issues" style="color: white; margin: 0 0.5rem;">问题反馈</a> | 
-                <a href="mailto:382192293@qq.com" style="color: white; margin: 0 0.5rem;">联系我们</a>
-            </p>
+    <section class="cta" aria-label="call to action">
+      <div>
+        <h2 style="margin:0">准备好构建你的即时通讯服务了吗？</h2>
+        <p style="margin:6px 0 0;color:var(--muted)">快速上手、可扩展、面向生产的 IM 解决方案。</p>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <a class="btn btn-primary" href="https://github.com/Luckly-XYZ/Lucky-cloud">查看服务端</a>
+        <a class="btn btn-ghost" href="https://github.com/Luckly-XYZ/Lucky-client">桌面客户端</a>
+      </div>
+    </section>
+
+    <footer role="contentinfo">
+      <div style="max-width:1000px;margin:14px auto 0;color:var(--muted)">
+        <div>© 2025 Lucky 项目 · 学习与参考使用</div>
+        <div style="margin-top:8px">
+          <a href="https://github.com/dennis9486/Lynk" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none">项目主页</a>
+          <span style="margin:0 8px">·</span>
+          <a href="mailto:382192293@qq.com" style="color:var(--muted);text-decoration:none">联系我们</a>
         </div>
+      </div>
     </footer>
+  </main>
 </body>
 </html>
